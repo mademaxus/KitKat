@@ -13,13 +13,20 @@ float pitch, roll, yaw, leap_height;
 PImage kk_front, kk_side;
 PFont f;
 
-PImage kitkat;
+PImage kitkat, wrapper, logo;
 
 int millisThreshold = 1000;
 
 int startMillis;
 
 int MODE = 0;
+
+String texts[] = {
+  "  You deserve a break!",
+  "Take one..",
+  "Have a break..",
+  "Have a KitKat.."
+};
 
 final int RESET          = 0;
 final int FOUR_FINGERS   = 1;
@@ -35,13 +42,16 @@ public void setup() {
 
   center = color(187, 7, 2);
   edge = color(158, 29, 10);
+  
   bg = color(228, 0, 49);
 
   kk_front = loadImage("textures/front.png");
   kk_side = loadImage("textures/side.png");
   textureMode(NORMAL);
 
-  kitkat = loadImage("final.jpg");
+  kitkat = loadImage("final.png");
+  wrapper = loadImage("first.png");
+  logo = loadImage("logo.png");
 
   f = loadFont("FranklinGothic-MediumItalic-96.vlw");
   textFont(f, 64);
@@ -49,6 +59,10 @@ public void setup() {
 
 public void draw() {
   background(bg);
+  
+//  image(logo, width/2 - 50, 0, 100, 100 );
+  image(logo, 20, 0, 50, 50 );
+  
   //kitkat();
   //fill(255, 127);
 
@@ -66,7 +80,8 @@ public void draw() {
     num_of_kitkats = 4;
     // place hand in front of leap to begin..
 
-    text("Would you like a treat?", width/4, height/2);
+    text(texts[0], width/4, height/4);
+    image(wrapper, width/3, height/2 - kitkat.height/3);
     //text((millis() - startMillis) + "", 300, 300);
     if (leap.getHandList().size() > 0) {
       if (millis() - startMillis > millisThreshold)
@@ -77,18 +92,20 @@ public void draw() {
     break;
 
   case SPLASH:
-    text("Have a break..", width/4, height/2);
+    text(texts[1], width/4, height/2);
     if (millis() - startMillis > millisThreshold * 3)
       MODE = ONE_FINGER;
     break;
 
   case FOUR_FINGERS:
+  
+    text(texts[1], width/3, height/4);
 
     theObject();
 
-    if ( leap.getFingerList().size() < 3) {
+    if ( leap.getFingerList().size() == 1) {
       if (millis() - startMillis > millisThreshold) {
-        MODE = SPLASH;
+        MODE = ONE_FINGER;
         num_of_kitkats = 1;
       }
     } else {
@@ -98,6 +115,8 @@ public void draw() {
 
 
   case ONE_FINGER:
+  
+    text(texts[2], width/3, height/4);
     theObject();
     if (leap.getHandList().size() == 2) {
       if (millis() - startMillis > millisThreshold) {
@@ -109,15 +128,16 @@ public void draw() {
     break;
 
   case BROKEN:
-    text("Have a", width/3, height/2);
-    image(kitkat, width/2, height/2 - kitkat.height/2);
-
+    text(texts[3], width/3, height/2 + 20);
+    image(kitkat, width/2 - kitkat.width/2, height/2 - kitkat.height/2);
     if (leap.getHandList().size() == 0) {
       if (millis() - startMillis > millisThreshold * 3)
         MODE = RESET;
       break;
     }
   }
+  
+//  println(leap_height);
 }
 
 public void stop() {

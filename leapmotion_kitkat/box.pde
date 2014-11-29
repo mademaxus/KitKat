@@ -12,7 +12,8 @@ void theObject() {
   rotateZ(roll);
   for (int i = 0; i < num_of_kitkats; i++) {
     pushMatrix();
-    translate(kk_w * i, 0);
+//    translate(kk_w * (i-2), 0, map(leap_height, 50, 200, -200, 200));
+    translate(kk_w + kk_w * (i-num_of_kitkats/2), 0);
     kitkat();
     popMatrix();
   }
